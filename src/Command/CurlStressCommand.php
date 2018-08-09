@@ -46,6 +46,8 @@ class CurlStressCommand extends Command
     /** @var KernelInterface */
     private $kernel;
 
+    private $client;
+
     public function __construct(KernelInterface $kernel)
     {
         parent::__construct();
@@ -98,6 +100,7 @@ class CurlStressCommand extends Command
             return 1;
         }
 
+        $this->client = new HttpClient([ RequestOptions::HTTP_ERRORS => false ]);
         $cycles = $this->input->getArgument('cycles');
         for ($i = 0; $i !== $cycles; ++$i) {
             $this->output->writeln("<h2>## Iteration $i</h2>");
@@ -113,8 +116,7 @@ class CurlStressCommand extends Command
     {
         $this->output->write("- $url - ");
         try {
-
-            $client = new HttpClient([ RequestOptions::HTTP_ERRORS => false ]);
+            $client = $this->client;
 
             $response = self::checkResponse($client->get($url));
             $contentType = Arr::head($response->getHeader('Content-Type'));
