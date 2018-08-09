@@ -133,6 +133,8 @@ class CurlStressCommand extends Command
             $message = $e->getMessage();
 
             $this->output->writeln("<failure>$class: $message</failure>");
+        } finally {
+            unset($client);
         }
     }
 
