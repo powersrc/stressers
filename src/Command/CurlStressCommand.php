@@ -14,6 +14,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -60,6 +61,7 @@ class CurlStressCommand extends Command
             setHelp('Stresses the system using the CURL library, through Guzzle.');
 
         $this->addArgument('cycles', InputArgument::OPTIONAL, '', 1024);
+        $this->addOption('https', 'S', InputOption::VALUE_NONE);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -85,8 +87,10 @@ class CurlStressCommand extends Command
     {
         $this->output->writeln('<h1># Memory Stress using cURL</h1>');
 
+        $filename = $this->input->getOption('https') ? '/../data/https_urls.txt' : '/../data/http_urls.txt';
+
         /** @var string[]|bool $urls */
-        $urls = Arr::map(file($this->kernel->getRootDir() . '/../data/rpm_packages.txt'), function ($url) {
+        $urls = Arr::map(file($this->kernel->getRootDir() . $filename), function ($url) {
             return Str::trim($url);
         });
 
