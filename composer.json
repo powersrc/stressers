@@ -1,5 +1,5 @@
 {
-    "name": "Stress Testing Application",
+    "name": "powersrc/stressers",
     "description": "Provides stress testing tools",
     "type": "project",
     "license": "proprietary",
